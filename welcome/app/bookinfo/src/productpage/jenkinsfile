@@ -12,6 +12,7 @@ pipeline {
                 script {
                     sh 'pwd && df -h'
                     sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile welcome/app/bookinfo/src/productpage'
+                    sh 'docker images' 
                 }
             }
         }
