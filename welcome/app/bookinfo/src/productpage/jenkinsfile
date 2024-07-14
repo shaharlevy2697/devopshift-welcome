@@ -10,34 +10,16 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    def image = docker.build("${env.IMAGE_NAME}:${env.VERSION}", "-f Dockerfile .")
+                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build .'
                 }
             }
         }
         stage('Test') {
             steps {
                 script {
-                    docker.image("${env.IMAGE_NAME}:${env.VERSION}").inside {
-                        sh 'python -m unittest discover'
+                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .'
+                    sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-test'
                     }
-                }
-            }
-        }
-        stage('Push') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: "${env.CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    script {
-                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${env.REPO}"
-                        sh "docker tag ${env.IMAGE_NAME}:${env.VERSION} ${env.REPO}/${env.IMAGE_NAME}:${env.VERSION}"
-                        sh "docker push ${env.REPO}/${env.IMAGE_NAME}:${env.VERSION}"
-                    }
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                script {
-                    // Add your deployment steps here
                 }
             }
         }
