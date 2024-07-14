@@ -10,7 +10,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build .'
+                    sh 'pwd && df -h'
+                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile .'
                 }
             }
         }
