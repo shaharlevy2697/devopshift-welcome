@@ -1,5 +1,5 @@
-
-FROM python:3.12.1-slim
+# Build stage
+FROM python:3.12.1-slim as build
 
 WORKDIR /
 
@@ -10,17 +10,27 @@ COPY test-requirements.txt ./
 RUN pip3 install --no-cache-dir --require-hashes -r test-requirements.txt
 
 COPY productpage.py /opt/microservices/
-COPY tests/unit/* /opt/microservices/
 COPY templates /opt/microservices/templates
 COPY static /opt/microservices/static
 COPY requirements.txt /opt/microservices/
 
-ARG flood_factor
-ENV FLOOD_FACTOR ${flood_factor:-0}
+# Test stage
+FROM build as test
 
-EXPOSE 9080
+COPY tests/unit /opt/microservices/tests/unit
 WORKDIR /opt/microservices
 RUN python -m unittest discover
+
+# Run stage
+FROM python:3.12.1-slim
+
+WORKDIR /opt/microservices
+
+COPY --from=build /opt/microservices /opt/microservices
+
+ARG flood_factor
+ENV FLOOD_FACTOR=${flood_factor:-0}
+EXPOSE 9080
 
 CMD ["gunicorn", "-b", "[::]:9080", "productpage:app", "-w", "8", "--keep-alive", "2", "-k", "gevent"]
 
