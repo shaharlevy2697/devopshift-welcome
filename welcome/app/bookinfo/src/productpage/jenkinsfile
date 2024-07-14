@@ -1,16 +1,16 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'my-docker-image'
+        IMAGE_NAME = 'sasnow/devopscurse'
         VERSION = "v${env.BUILD_NUMBER}"
-        REPO = 'devopshift-welcome'
+        REPO = 'sasnow'
         CREDENTIALS_ID = 'docker-credentials'
     }
     stages {
         stage('Build') {
             steps {
                 script {
-                    docker.build("${env.IMAGE_NAME}:${env.VERSION}", "-f Dockerfile .")
+                    def image = docker.build("${env.IMAGE_NAME}:${env.VERSION}", "-f Dockerfile .")
                 }
             }
         }
