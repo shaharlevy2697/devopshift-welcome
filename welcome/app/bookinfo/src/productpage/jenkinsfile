@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    environment {
+        IMAGE_NAME = 'my-docker-image'
+        VERSION = "v${env.BUILD_NUMBER}"
+        REPO = 'devopshift-welcome'
+        CREDENTIALS_ID = 'docker-credentials'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    docker.build("${env.IMAGE_NAME}:${env.VERSION}", "-f Dockerfile .")
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    docker.image("${env.IMAGE_NAME}:${env.VERSION}").inside {
+                        sh 'python -m unittest discover'
+                    }
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    script {
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${env.REPO}"
+                        sh "docker tag ${env.IMAGE_NAME}:${env.VERSION} ${env.REPO}/${env.IMAGE_NAME}:${env.VERSION}"
+                        sh "docker push ${env.REPO}/${env.IMAGE_NAME}:${env.VERSION}"
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    // Add your deployment steps here
+                }
+            }
+        }
+    }
+}
