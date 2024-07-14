@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .'
+                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile .'
                     sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-test'
                     }
                 }
