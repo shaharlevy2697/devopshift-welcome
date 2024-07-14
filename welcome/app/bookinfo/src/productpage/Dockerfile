@@ -1,7 +1,7 @@
 # Build stage
 FROM python:3.12.1-slim as build
 
-WORKDIR /app
+WORKDIR /
 
 COPY requirements.txt ./
 RUN pip3 install -vvv --require-hashes --no-cache-dir -r requirements.txt
@@ -29,7 +29,7 @@ WORKDIR /opt/microservices
 COPY --from=build /opt/microservices /opt/microservices
 
 ARG flood_factor
-ARG BUILD_NUMBER
+ENV FLOOD_FACTOR=${flood_factor:-0}
 EXPOSE 9080
 
 CMD ["gunicorn", "-b", "[::]:9080", "productpage:app", "-w", "8", "--keep-alive", "2", "-k", "gevent"]
