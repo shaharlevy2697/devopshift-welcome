@@ -10,6 +10,7 @@ COPY test-requirements.txt ./
 RUN pip3 install --no-cache-dir --require-hashes -r test-requirements.txt
 
 COPY productpage.py /opt/microservices/
+COPY tests/unit/* /opt/microservices/
 COPY templates /opt/microservices/templates
 COPY static /opt/microservices/static
 COPY requirements.txt /opt/microservices/
@@ -17,7 +18,7 @@ COPY requirements.txt /opt/microservices/
 # Test stage
 FROM build as test
 
-COPY tests/unit /opt/microservices/tests/unit
+
 WORKDIR /opt/microservices
 RUN python -m unittest discover
 
