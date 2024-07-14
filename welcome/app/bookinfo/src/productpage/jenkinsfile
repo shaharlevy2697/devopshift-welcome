@@ -28,6 +28,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', "${CREDENTIALS_ID}") {
+                        sh 'docker tag ${IMAGE_NAME}:${VERSION}-build ${REPO}/${IMAGE_NAME}:${VERSION}-build'
                         sh 'docker push ${REPO}/${IMAGE_NAME}:${VERSION}-build' 
                     }
                 }
