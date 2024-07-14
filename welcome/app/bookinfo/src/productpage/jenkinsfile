@@ -11,14 +11,14 @@ pipeline {
             steps {
                 script {
                     sh 'pwd && df -h'
-                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile .'
+                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile welcome/app/bookinfo/src/productpage'
                 }
             }
         }
         stage('Test') {
             steps {
                 script {
-                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile .'
+                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/app/bookinfo/src/productpage/Dockerfile welcome/app/bookinfo/src/productpage'
                     sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-test'
                     }
                 }
