@@ -17,7 +17,7 @@ COPY requirements.txt /opt/microservices/
 # Test stage
 FROM build as test
 
-COPY tests/unit/* /opt/microservices/tests/unit/
+COPY tests/unit /opt/microservices/tests/unit
 WORKDIR /opt/microservices
 RUN python -m unittest discover
 
