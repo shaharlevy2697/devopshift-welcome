@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'sasnow/devopscurse'
+        IMAGE_NAME = 'devopscurse'
         VERSION = "v${env.BUILD_NUMBER}"
         REPO = 'sasnow'
         CREDENTIALS_ID = 'docker-credentials'
