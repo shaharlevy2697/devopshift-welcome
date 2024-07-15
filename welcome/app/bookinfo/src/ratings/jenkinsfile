@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker build --target lint-test --tag ${IMAGE_NAME}:${VERSION}-lint -f welcome/app/bookinfo/src/ratings/Dockerfile welcome/app/bookinfo/src/ratings'
-                    sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-test'
+                    sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-lint'
                     }
                 }
             }
