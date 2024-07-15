@@ -5,6 +5,7 @@ pipeline {
         VERSION = "v${env.BUILD_NUMBER}"
         REPO = 'sasnow'
         CREDENTIALS_ID = 'docker-credentials'
+        SNYK_TOKEN = 'eba9cef6-9d9a-4a06-ad7f-703a829eaaa6'
     }
     stages {
         stage('Build') {
