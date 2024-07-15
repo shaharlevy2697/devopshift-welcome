@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     sh 'pwd && df -h'
-                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/productpage/Dockerfile welcome/app/bookinfo/src/productpage'
+                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/app/bookinfo/src/reviews/Dockerfile welcome/app/bookinfo/src/reviews'
                     sh 'docker images' 
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
         stage('Security') {
             steps {
                 script {
-                    sh 'docker build --target security --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-security -f welcome/app/bookinfo/src/productpage/Dockerfile welcome/app/bookinfo/src/productpage'
+                    sh 'docker build --target security --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-security -f welcome/app/bookinfo/src/reviews/Dockerfile welcome/app/bookinfo/src/reviews'
                     sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-security'
                     }
                 }
